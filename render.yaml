@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     buildCommand: pnpm install && pnpm run build:web && pnpm run build
-    startCommand: node dist/index.js
+    startCommand: node dist/server/index.js
     envVars:
       - key: NODE_ENV
         value: production
