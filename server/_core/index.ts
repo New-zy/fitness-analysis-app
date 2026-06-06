@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
+import fs from "fs";
 import net from "net";
 import path from "path";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
@@ -73,7 +74,12 @@ async function startServer() {
   );
 
   app.get("*", (_req, res) => {
-    res.sendFile(path.join(webBuildDir, "index.html"));
+    const indexPath = path.join(webBuildDir, "index.html");
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      res.json({ ok: true, message: "FitCorrect AI API", timestamp: Date.now() });
+    }
   });
 
   const preferredPort = parseInt(process.env.PORT || "3000");
