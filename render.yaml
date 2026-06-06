@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: fitness-analysis-app
+    runtime: node
+    plan: free
+    buildCommand: pnpm install && pnpm run build
+    startCommand: node dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: OAUTH_SERVER_URL
+        value: https://api.manus.im
+      - key: JWT_SECRET
+        value: 5euMEdn8D4RuzffadCjDou
+      - key: VITE_APP_ID
+        value: VZcgxiUCKgSnMKAtBzakzU
+      - key: OWNER_OPEN_ID
+        value: D6ydszEgr6EkpGpoqje4V8
+      - key: DATABASE_URL
+        value: mysql://31BpD7j9xQtS6HN.root:4jKSco3f7lmJN33t2sSM@gateway04.us-east-1.prod.aws.tidbcloud.com:4000/VZcgxiUCKgSnMKAtBzakzU?ssl={"rejectUnauthorized":true}
+      - key: BUILT_IN_FORGE_API_URL
+        value: https://forge.manus.ai
+      - key: BUILT_IN_FORGE_API_KEY
+        value: mDww2bghWqWGPHwFvbmQuJ
