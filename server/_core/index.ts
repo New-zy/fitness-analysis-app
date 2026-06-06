@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
 import net from "net";
+import path from "path";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
@@ -54,11 +55,10 @@ async function startServer() {
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-  registerOAuthRoutes(app);
+  const webBuildDir = path.resolve("web-build");
+  app.use(express.static(webBuildDir));
 
-  app.get("/", (_req, res) => {
-    res.json({ ok: true, message: "FitCorrect AI API", timestamp: Date.now() });
-  });
+  registerOAuthRoutes(app);
 
   app.get("/api/health", (_req, res) => {
     res.json({ ok: true, timestamp: Date.now() });
@@ -71,6 +71,10 @@ async function startServer() {
       createContext,
     }),
   );
+
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(webBuildDir, "index.html"));
+  });
 
   const preferredPort = parseInt(process.env.PORT || "3000");
   const port = await findAvailablePort(preferredPort);

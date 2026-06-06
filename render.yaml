@@ -3,7 +3,7 @@ services:
     name: fitness-analysis-app
     runtime: node
     plan: free
-    buildCommand: pnpm install && pnpm run build
+    buildCommand: pnpm install && pnpm run build:web && pnpm run build
     startCommand: node dist/index.js
     envVars:
       - key: NODE_ENV
@@ -24,3 +24,7 @@ services:
         value: https://forge.manus.ai
       - key: BUILT_IN_FORGE_API_KEY
         value: mDww2bghWqWGPHwFvbmQuJ
+      - key: VITE_OAUTH_PORTAL_URL
+        value: https://manus.im
+      - key: OWNER_NAME
+        value: Koba
