@@ -42,22 +42,41 @@ function normalizeKey(relKey: string): string {
   return relKey.replace(/^\/+/, "");
 }
 
-function toFormData(
+function buildAuthHeaders(apiKey: string): HeadersInit {
+  return { Authorization: `Bearer ${apiKey}` };
+}
+
+function buildMultipartBody(
   data: Buffer | Uint8Array | string,
   contentType: string,
   fileName: string,
-): FormData {
-  const blob =
-    typeof data === "string"
-      ? new Blob([data], { type: contentType })
-      : new Blob([data as any], { type: contentType });
-  const form = new FormData();
-  form.append("file", blob, fileName || "file");
-  return form;
-}
+): { body: Buffer; headers: HeadersInit } {
+  const boundary = `----FormBoundary${Date.now()}${Math.random().toString(36).slice(2)}`;
+  const crlf = "\r\n";
+  const buf = typeof data === "string" ? Buffer.from(data, "utf-8") : Buffer.from(data);
 
-function buildAuthHeaders(apiKey: string): HeadersInit {
-  return { Authorization: `Bearer ${apiKey}` };
+  const header = [
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="file"; filename="${fileName}"`,
+    `Content-Type: ${contentType}`,
+    "",
+    "",
+  ].join(crlf);
+
+  const footer = `${crlf}--${boundary}--${crlf}`;
+
+  const body = Buffer.concat([
+    Buffer.from(header, "utf-8"),
+    buf,
+    Buffer.from(footer, "utf-8"),
+  ]);
+
+  return {
+    body,
+    headers: {
+      "Content-Type": `multipart/form-data; boundary=${boundary}`,
+    },
+  };
 }
 
 export async function storagePut(
@@ -68,11 +87,16 @@ export async function storagePut(
   const { baseUrl, apiKey } = getStorageConfig();
   const key = normalizeKey(relKey);
   const uploadUrl = buildUploadUrl(baseUrl, key);
-  const formData = toFormData(data, contentType, key.split("/").pop() ?? key);
+  const { body, headers: formHeaders } = buildMultipartBody(
+    data,
+    contentType,
+    key.split("/").pop() ?? key,
+  );
+
   const response = await fetch(uploadUrl, {
     method: "POST",
-    headers: buildAuthHeaders(apiKey),
-    body: formData,
+    headers: { ...buildAuthHeaders(apiKey), ...formHeaders },
+    body,
   });
 
   if (!response.ok) {
