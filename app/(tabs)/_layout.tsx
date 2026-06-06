@@ -2,9 +2,12 @@ import { Tabs } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HapticTab } from "@/components/haptic-tab";
-import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Platform } from "react-native";
+import { Platform, Text } from "react-native";
 import { useColors } from "@/hooks/use-colors";
+
+function TabIcon({ label, color }: { label: string; color: string }) {
+  return <Text style={{ fontSize: 20, color }}>{label}</Text>;
+}
 
 export default function TabLayout() {
   const colors = useColors();
@@ -32,35 +35,35 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "首页",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon label="🏠" color={color} />,
         }}
       />
       <Tabs.Screen
         name="upload"
         options={{
           title: "上传",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon label="📤" color={color} />,
         }}
       />
       <Tabs.Screen
         name="history"
         options={{
           title: "历史",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="clock.fill" color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon label="🕐" color={color} />,
         }}
       />
       <Tabs.Screen
         name="detail"
         options={{
           title: "详情",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="doc.fill" color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon label="📄" color={color} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
           title: "设置",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon label="⚙️" color={color} />,
         }}
       />
     </Tabs>
