@@ -81,7 +81,7 @@ export default function SettingsScreen() {
 
             <TouchableOpacity className="bg-surface border border-border rounded-xl p-4 active:opacity-70">
               <Text className="text-base font-semibold text-foreground">📧 联系我们</Text>
-              <Text className="text-sm text-muted mt-1">support@fitcorrect.ai</Text>
+              <Text className="text-sm text-muted mt-1">zhiyuanxia401@gmail.com</Text>
             </TouchableOpacity>
 
             <TouchableOpacity className="bg-surface border border-border rounded-xl p-4 active:opacity-70">
@@ -92,7 +92,7 @@ export default function SettingsScreen() {
 
           {/* Footer */}
           <View className="items-center gap-2 mt-4 pt-4 border-t border-border">
-            <Text className="text-sm text-muted">FitCorrect AI © 2024</Text>
+            <Text className="text-sm text-muted">FitCorrect AI © 2026</Text>
             <Text className="text-xs text-muted">
               专业的健身动作分析纠正平台
             </Text>
